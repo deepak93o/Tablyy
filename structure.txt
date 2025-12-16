@@ -1,0 +1,125 @@
+tablyy/
+│
+├── backend/                               # Laravel Backend (Main API)
+│   ├── app/
+│   │   ├── Console/                        # CRON jobs, cleanup commands
+│   │   ├── Events/                         # Broadcastable events (Realtime)
+│   │   ├── Exceptions/
+│   │   ├── Http/
+│   │   │   ├── Controllers/
+│   │   │   │   ├── Auth/
+│   │   │   │   ├── Tables/                 # Table registration, QR generation
+│   │   │   │   ├── Sessions/               # AI verification result → Session create
+│   │   │   │   ├── Menu/                   # Customer menu APIs
+│   │   │   │   ├── Orders/                 # Order placement, status updates
+│   │   │   │   ├── Billing/                # Billing logic + final bill
+│   │   │   │   ├── Payments/               # Online + Offline payment endpoints
+│   │   │   │   ├── Discounts/              # Restaurant/Item discounts
+│   │   │   │   ├── Analytics/              # Owner dashboard analytics
+│   │   │   │   └── QR/                     # QR token redirects (q/{token})
+│   │   │   ├── Middleware/
+│   │   │   └── Requests/                   # Validation
+│   │   │
+│   │   ├── Models/
+│   │   │   ├── Restaurant.php
+│   │   │   ├── Table.php
+│   │   │   ├── TablePhoto.php
+│   │   │   ├── Session.php
+│   │   │   ├── MenuItem.php
+│   │   │   ├── Order.php
+│   │   │   ├── OrderItem.php
+│   │   │   ├── Discount.php
+│   │   │   ├── Payment.php
+│   │   │   ├── QRToken.php                 # For short links /q/{token}
+│   │   │   ├── MatchLog.php                # AI verification logs
+│   │   │   └── AuditLog.php                # Staff actions, bill edits, etc.
+│   │   │
+│   │   ├── Services/                       # Business Logic Layer
+│   │   │   ├── AIService.php               # Communicates with n8n AI workflow
+│   │   │   ├── SessionService.php          # Session creation, TTL handling
+│   │   │   ├── QRService.php               # Table QR generation (PNG/PDF/ZIP)
+│   │   │   ├── OrderService.php
+│   │   │   ├── BillingService.php
+│   │   │   ├── DiscountService.php
+│   │   │   ├── PaymentService.php
+│   │   │   ├── FraudDetectionService.php   # Photo-of-photo, rate limiting
+│   │   │   └── AnalyticsService.php
+│   │   │
+│   │   ├── Notifications/                  # Staff notifications
+│   │   │   └── NewOrderNotification.php
+│   │   │
+│   │   ├── Providers/
+│   │   └── Traits/
+│   │
+│   ├── bootstrap/
+│   ├── config/
+│   │   ├── qr.php                          # QR settings, paths
+│   │   ├── ai.php                          # n8n endpoints, API keys
+│   │   ├── websocket.php                   # Pusher/NodeWebsocket config
+│   │   ├── payments.php                    # Payment gateway + offline modes
+│   │   └── services.php
+│   │
+│   ├── database/
+│   │   ├── migrations/                     # All tables from ERD
+│   │   ├── seeders/
+│   │   └── factories/
+│   │
+│   ├── routes/
+│   │   ├── api.php                         # Customer APIs
+│   │   ├── staff.php                       # Staff dashboard APIs
+│   │   ├── owner.php                       # Owner dashboard APIs
+│   │   └── web.php                         # /q/{token} redirect route
+│   │
+│   ├── storage/
+│   │   ├── app/
+│   │   │   ├── qr-codes/                   # Generated QR PNGs
+│   │   │   ├── invoices/                   # Auto-generated invoices
+│   │   │   ├── table-photos/               # Uploaded table reference photos
+│   │   │   └── match-logs/                 # AI verification temp photos/logs
+│   │   ├── logs/
+│   │   └── public/
+│   │
+│   ├── tests/
+│   └── composer.json
+|
+│  ###################################################################################################backend ends
+│
+├── apps/
+│   ├── customer-pwa/                       # React/Vue PWA (menu + order + payment)
+│   ├── staff-dashboard/                    # Staff/Kitchen real-time order dashboard
+│   └── owner-dashboard/                    # Owner analytics + settings
+│
+│
+├── ai-service/
+│   ├── workflows/
+│   │   ├── table_verification.json         # n8n AI workflow: image → match_score
+│   │   └── fraud_detection.json            # Photo-of-photo + spoof detection
+│   └── docs/                               # How backend communicates with n8n
+│
+│
+├── websocket-server/ (optional)
+│   ├── server.js                            # Node.js Socket.IO server
+│   ├── events/                              # Broadcast events
+│   └── package.json
+│
+│
+├── docs/
+│   ├── SDLC/
+│   ├── SRS/
+│   ├── SDD/
+│   ├── Architecture/
+│   ├── ER-Diagram/
+│   ├── Sequence-Diagrams/
+│   ├── QR-System-Flow/
+│   └── Branding/
+│
+│
+├── infra/
+│   ├── nginx/
+│   │   └── tablyy.conf                      # PHP + PWA + WebSockets reverse proxy
+│   ├── supervisor/                          # Laravel queue workers, schedule workers
+│   ├── cron/                                # invoice cleanup, session cleanup
+│   ├── ssl/                                 # cert files
+│   └── docker/                              # Docker (optional)
+│
+└── README.md
